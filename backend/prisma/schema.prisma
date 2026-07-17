@@ -1,0 +1,326 @@
+// Prisma schema — struktur database sesuai blueprint WMS v3
+// Rekomendasi blueprint: PostgreSQL
+//
+// PERUBAHAN: role 'STAFF' (lama, generic) sudah dihapus dari enum Role.
+// Sudah dipastikan aman sebelum dihapus: (1) query SQL langsung ke database
+// menunjukkan 0 user yang masih memakai role STAFF, (2) tidak ada kode
+// backend/frontend yang meng-hardcode string 'STAFF'. Role yang dipakai sekarang:
+// ADMIN, STAFF_ADMIN, STAFF_GUDANG, SUPERVISOR, MANAGER.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STAFF_ADMIN
+  STAFF_GUDANG
+  SUPERVISOR
+  MANAGER
+}
+
+enum PlanType {
+  FREE
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
+enum POStatus {
+  DRAFT
+  ORDERED
+  PARTIAL
+  RECEIVED
+  CANCELLED
+}
+
+enum SOStatus {
+  DRAFT
+  CONFIRMED
+  PARTIAL
+  SHIPPED
+  CANCELLED
+}
+
+enum OpnameStatus {
+  DRAFT
+  COMPLETED
+}
+
+enum MovementType {
+  IN
+  OUT
+  TRANSFER
+  ADJUSTMENT
+}
+
+model Company {
+  id            String    @id @default(uuid())
+  name          String
+  plan          PlanType  @default(FREE)
+  maxUsers      Int       @default(1)
+  maxWarehouses Int       @default(1)
+  expiredAt     DateTime?
+  createdAt     DateTime  @default(now())
+
+  users       User[]
+  warehouses  Warehouse[]
+  suppliers   Supplier[]
+  categories  Category[]
+  customers   Customer[]
+
+  @@map("companies")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  companyId    String
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(STAFF_GUDANG)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  company        Company         @relation(fields: [companyId], references: [id])
+  stockMovements StockMovement[]
+  notifications  Notification[]
+  stockOpnames   StockOpname[]
+
+  @@map("users")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  companyId String
+  name      String
+  createdAt DateTime @default(now())
+
+  company  Company   @relation(fields: [companyId], references: [id])
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id         String   @id @default(uuid())
+  companyId  String
+  categoryId String?
+  sku        String
+  name       String
+  unit       String   @default("pcs")
+  minStock   Int      @default(0)
+  barcode    String?
+  photoUrl   String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  preferredSupplierId String?
+  preferredSupplier   Supplier? @relation("PreferredSupplier", fields: [preferredSupplierId], references: [id])
+
+  category       Category?           @relation(fields: [categoryId], references: [id])
+  stocks         Stock[]
+  stockMovements StockMovement[]
+  poItems        PurchaseOrderItem[]
+  soItems        SalesOrderItem[]
+  opnameItems    StockOpnameItem[]
+
+  @@unique([companyId, sku])
+  @@map("products")
+}
+
+model Warehouse {
+  id        String   @id @default(uuid())
+  companyId String
+  name      String
+  address   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  company        Company         @relation(fields: [companyId], references: [id])
+  stocks         Stock[]
+  stockMovements StockMovement[]
+  bins           Bin[]
+  stockOpnames   StockOpname[]
+
+  @@map("warehouses")
+}
+
+model Bin {
+  id          String   @id @default(uuid())
+  warehouseId String
+  code        String
+  name        String?
+  createdAt   DateTime @default(now())
+
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id])
+  stocks    Stock[]
+
+  @@unique([warehouseId, code])
+  @@map("bins")
+}
+
+model Stock {
+  id          String   @id @default(uuid())
+  productId   String
+  warehouseId String
+  binId       String?
+  quantity    Decimal  @default(0)
+  updatedAt   DateTime @updatedAt
+
+  product   Product   @relation(fields: [productId], references: [id])
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id])
+  bin       Bin?      @relation(fields: [binId], references: [id])
+
+  @@unique([productId, warehouseId])
+  @@map("stocks")
+}
+
+model StockMovement {
+  id          String       @id @default(uuid())
+  productId   String
+  warehouseId String
+  type        MovementType
+  quantity    Decimal
+  referenceId String?
+  createdById String
+  createdAt   DateTime     @default(now())
+
+  product   Product   @relation(fields: [productId], references: [id])
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id])
+  createdBy User      @relation(fields: [createdById], references: [id])
+
+  @@map("stock_movements")
+}
+
+model Supplier {
+  id        String   @id @default(uuid())
+  companyId String
+  name      String
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+
+  company        Company         @relation(fields: [companyId], references: [id])
+  purchaseOrders PurchaseOrder[]
+
+  preferredForProducts Product[] @relation("PreferredSupplier")
+
+  @@map("suppliers")
+}
+
+model PurchaseOrder {
+  id           String    @id @default(uuid())
+  supplierId   String
+  status       POStatus  @default(DRAFT)
+  totalItems   Int       @default(0)
+  expectedDate DateTime?
+  createdAt    DateTime  @default(now())
+
+  supplier Supplier            @relation(fields: [supplierId], references: [id])
+  items    PurchaseOrderItem[]
+
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id               String  @id @default(uuid())
+  purchaseOrderId  String
+  productId        String
+  quantity         Decimal
+  quantityReceived Decimal @default(0)
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  product       Product       @relation(fields: [productId], references: [id])
+
+  @@map("purchase_order_items")
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  companyId String
+  name      String
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+
+  company     Company      @relation(fields: [companyId], references: [id])
+  salesOrders SalesOrder[]
+
+  @@map("customers")
+}
+
+model SalesOrder {
+  id               String    @id @default(uuid())
+  customerId       String
+  status           SOStatus  @default(DRAFT)
+  totalItems       Int       @default(0)
+  expectedShipDate DateTime?
+  createdAt        DateTime  @default(now())
+
+  customer Customer         @relation(fields: [customerId], references: [id])
+  items    SalesOrderItem[]
+
+  @@map("sales_orders")
+}
+
+model SalesOrderItem {
+  id              String  @id @default(uuid())
+  salesOrderId    String
+  productId       String
+  quantity        Decimal
+  quantityShipped Decimal @default(0)
+
+  salesOrder SalesOrder @relation(fields: [salesOrderId], references: [id])
+  product    Product    @relation(fields: [productId], references: [id])
+
+  @@map("sales_order_items")
+}
+
+model StockOpname {
+  id          String       @id @default(uuid())
+  warehouseId String
+  status      OpnameStatus @default(DRAFT)
+  note        String?
+  createdById String
+  createdAt   DateTime     @default(now())
+  completedAt DateTime?
+
+  warehouse Warehouse         @relation(fields: [warehouseId], references: [id])
+  createdBy User              @relation(fields: [createdById], references: [id])
+  items     StockOpnameItem[]
+
+  @@map("stock_opnames")
+}
+
+model StockOpnameItem {
+  id            String   @id @default(uuid())
+  stockOpnameId String
+  productId     String
+  systemQty     Decimal
+  physicalQty   Decimal?
+  difference    Decimal?
+
+  stockOpname StockOpname @relation(fields: [stockOpnameId], references: [id])
+  product     Product     @relation(fields: [productId], references: [id])
+
+  @@map("stock_opname_items")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}

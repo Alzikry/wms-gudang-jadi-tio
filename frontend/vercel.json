@@ -1,8 +1,14 @@
 {
+  "cleanUrls": true,
   "rewrites": [
-    {
-      "source": "/((?!manifest.webmanifest|sw.js|registerSW.js|workbox-(.*)\\.js|icon-192\\.png|icon-512\\.png|favicon\\.svg|icons\\.svg).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/manifest.webmanifest", "destination": "/manifest.webmanifest" },
+    { "source": "/sw.js", "destination": "/sw.js" },
+    { "source": "/registerSW.js", "destination": "/registerSW.js" },
+    { "source": "/workbox-:hash.js", "destination": "/workbox-:hash.js" },
+    { "source": "/icon-192.png", "destination": "/icon-192.png" },
+    { "source": "/icon-512.png", "destination": "/icon-512.png" },
+    { "source": "/favicon.svg", "destination": "/favicon.svg" },
+    { "source": "/icons.svg", "destination": "/icons.svg" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

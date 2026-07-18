@@ -2,73 +2,95 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+
 body {
   margin: 0;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: #20242E;
 }
 
 /* ============================================================
-   Tema Glassmorphism — WMS Pro
-   Latar gradasi biru-ungu gelap khas "digital warehouse malam",
-   dengan panel kaca (blur + transparansi) untuk semua kartu/nav.
+   Tema White Elegant Glassmorphism — WMS Pro
+   Latar alabaster/pearl lembut dengan orb ambient emerald & gold,
+   panel kaca (blur + saturate) untuk semua kartu/nav.
    ============================================================ */
 
 .wms-bg {
-  background: linear-gradient(160deg, #0b1224 0%, #151238 45%, #1e1b4b 100%);
+  background: linear-gradient(160deg, #F8F7F4 0%, #EFF1F5 55%, #E9EBF2 100%);
   position: relative;
   overflow-x: hidden;
+}
+
+.font-display {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 /* Orb cahaya ambient di latar — murni dekoratif, tidak mengganggu layout */
 .wms-orb {
   position: fixed;
   border-radius: 9999px;
-  filter: blur(90px);
+  filter: blur(80px);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.35;
 }
 .wms-orb-a {
-  width: 340px;
-  height: 340px;
+  width: 420px;
+  height: 420px;
   top: -80px;
-  right: -100px;
-  background: #22d3ee;
+  left: 6%;
+  background: rgba(176, 141, 87, 0.35);
 }
 .wms-orb-b {
-  width: 300px;
-  height: 300px;
-  bottom: 10%;
-  left: -120px;
-  background: #818cf8;
+  width: 460px;
+  height: 460px;
+  bottom: -10%;
+  right: 2%;
+  background: rgba(14, 107, 92, 0.3);
+}
+.wms-orb-c {
+  width: 280px;
+  height: 280px;
+  top: 35%;
+  left: 55%;
+  background: rgba(179, 67, 92, 0.16);
 }
 
 .glass-panel {
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.32) 100%);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 1.25rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 16px 40px rgba(31, 36, 48, 0.1), 0 2px 0 rgba(255, 255, 255, 0.7) inset;
+}
+
+/* Garis signature tipis emerald->gold, dipakai opsional di atas kartu penting */
+.glass-signature {
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(90deg, #0E6B5C, #B08D57);
 }
 
 .drawer-panel {
-  background: rgba(15, 18, 40, 0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .drawer-tile {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(32, 36, 46, 0.08);
 }
 
 .drawer-tile-admin {
-  background: rgba(244, 63, 94, 0.08);
-  border: 1px solid rgba(244, 63, 94, 0.2);
+  background: rgba(179, 67, 92, 0.08);
+  border: 1px solid rgba(179, 67, 92, 0.2);
 }
 
 .nav-chip {
@@ -78,20 +100,75 @@ body {
   padding: 0.55rem 1rem;
   border-radius: 9999px;
   font-size: 0.875rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: background 0.15s ease, border-color 0.15s ease;
+  font-weight: 600;
+  color: #5B6472;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 .nav-chip:hover {
-  background: rgba(34, 211, 238, 0.12);
-  border-color: rgba(34, 211, 238, 0.35);
+  background: rgba(14, 107, 92, 0.1);
+  border-color: rgba(14, 107, 92, 0.3);
+  color: #0E6B5C;
+}
+.nav-chip.active {
+  color: #fff;
+  background: linear-gradient(135deg, #0E6B5C, #0A4F44);
+  border-color: transparent;
+}
+
+/* Input & field ala kaca, dipakai di semua form */
+.glass-field {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.875rem;
+  color: #20242E;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(32, 36, 46, 0.12);
+  border-radius: 0.75rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.glass-field:focus {
+  border-color: #0E6B5C;
+  box-shadow: 0 0 0 3px rgba(14, 107, 92, 0.12);
+}
+
+/* Tombol utama, gradient emerald */
+.btn-primary {
+  background: linear-gradient(135deg, #0E6B5C 0%, #0A4F44 100%);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(14, 107, 92, 0.28);
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+.btn-primary:hover {
+  box-shadow: 0 6px 18px rgba(14, 107, 92, 0.35);
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.badge-low {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #B3435C;
+  background: rgba(179, 67, 92, 0.1);
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
 }
 
 /* Angka stok pakai tabular figures biar rapi sejajar */
 .font-mono {
+  font-family: 'JetBrains Mono', monospace;
   font-variant-numeric: tabular-nums;
 }

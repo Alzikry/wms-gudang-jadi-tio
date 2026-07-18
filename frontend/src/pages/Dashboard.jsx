@@ -84,14 +84,14 @@ export default function Dashboard() {
         {/* ===== HEADER ===== */}
         <header className="glass-panel flex justify-between items-center px-5 py-4 mb-5">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">Dashboard Gudang</h1>
-            <p className="text-cyan-100/60 text-xs md:text-sm mt-0.5">
-              {user?.name} <span className="text-cyan-300/80">· {user?.role}</span>
+            <h1 className="font-display text-xl md:text-2xl text-ink tracking-tight">Dashboard Gudang</h1>
+            <p className="text-ink-soft text-xs md:text-sm mt-0.5">
+              {user?.name} <span className="text-brand font-medium">· {user?.role}</span>
             </p>
           </div>
           <button
             onClick={logout}
-            className="text-xs font-medium text-red-300 bg-red-500/10 border border-red-400/30 rounded-full px-3 py-1.5 hover:bg-red-500/20 transition-colors"
+            className="text-xs font-medium text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/25 rounded-full px-3 py-1.5 hover:bg-[#B3435C]/20 transition-colors"
           >
             Keluar
           </button>
@@ -109,23 +109,23 @@ export default function Dashboard() {
         {/* ===== NAV MOBILE — buka drawer ===== */}
         <button
           onClick={() => setShowMoreMenu(true)}
-          className="md:hidden glass-panel w-full mb-5 px-5 py-3.5 text-sm font-medium text-left flex justify-between items-center text-white/90"
+          className="md:hidden glass-panel w-full mb-5 px-5 py-3.5 text-sm font-medium text-left flex justify-between items-center text-ink"
         >
           <span className="flex items-center gap-2">
             <span className="text-lg">☰</span> Semua Menu
           </span>
-          <span className="text-cyan-300">→</span>
+          <span className="text-brand">→</span>
         </button>
 
         {/* ===== ALERT STOK MENIPIS ===== */}
         {alerts.length > 0 && (
-          <div className="glass-panel border-amber-400/30 px-5 py-4 mb-5">
-            <p className="text-amber-300 font-semibold text-sm flex items-center gap-2 mb-2">
+          <div className="glass-panel border-amber-400/40 px-5 py-4 mb-5">
+            <p className="text-amber-700 font-semibold text-sm flex items-center gap-2 mb-2">
               <span>⚠️</span> Stok Menipis
             </p>
             <ul className="space-y-1">
               {alerts.map((a, i) => (
-                <li key={i} className="text-amber-100/80 text-xs">
+                <li key={i} className="text-amber-800/80 text-xs">
                   {a.productName} — sisa <span className="font-mono font-semibold">{a.currentQty}</span> (min {a.minStock})
                 </li>
               ))}
@@ -135,7 +135,7 @@ export default function Dashboard() {
 
         {/* ===== DAFTAR PRODUK — kartu di mobile, tabel di desktop ===== */}
         <section>
-          <h2 className="text-white/70 text-xs font-semibold uppercase tracking-wider mb-3 px-1">
+          <h2 className="text-ink-soft text-xs font-semibold uppercase tracking-wider mb-3 px-1">
             Ringkasan Stok
           </h2>
 
@@ -145,28 +145,24 @@ export default function Dashboard() {
               <div key={p.id} className="glass-panel px-4 py-3.5">
                 <div className="flex justify-between items-start gap-3">
                   <div className="min-w-0">
-                    <p className="text-white font-semibold text-sm truncate">{p.name}</p>
-                    <p className="text-cyan-200/50 text-xs font-mono mt-0.5">{p.sku}</p>
+                    <p className="text-ink font-semibold text-sm truncate">{p.name}</p>
+                    <p className="text-ink-soft/70 text-xs font-mono mt-0.5">{p.sku}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className={`font-mono font-bold text-lg leading-none ${p.isLow ? 'text-rose-300' : 'text-emerald-300'}`}>
+                    <p className={`font-mono font-bold text-lg leading-none ${p.isLow ? 'text-[#B3435C]' : 'text-brand'}`}>
                       {p.currentStock}
                     </p>
-                    <p className="text-white/40 text-[11px] mt-1">{p.unit}</p>
+                    <p className="text-ink-soft/60 text-[11px] mt-1">{p.unit}</p>
                   </div>
                 </div>
-                <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/10">
-                  <span className="text-white/40 text-[11px]">Min. stok: {p.minStock} {p.unit}</span>
-                  {p.isLow && (
-                    <span className="text-[10px] font-semibold text-rose-300 bg-rose-500/15 border border-rose-400/30 rounded-full px-2 py-0.5">
-                      Perlu restock
-                    </span>
-                  )}
+                <div className="flex justify-between items-center mt-3 pt-3 border-t border-ink/10">
+                  <span className="text-ink-soft/60 text-[11px]">Min. stok: {p.minStock} {p.unit}</span>
+                  {p.isLow && <span className="badge-low">Perlu restock</span>}
                 </div>
               </div>
             ))}
             {withStock.length === 0 && (
-              <div className="glass-panel px-5 py-8 text-center text-white/40 text-sm">
+              <div className="glass-panel px-5 py-8 text-center text-ink-soft/60 text-sm">
                 Belum ada produk
               </div>
             )}
@@ -176,7 +172,7 @@ export default function Dashboard() {
           <div className="hidden md:block glass-panel overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/10 text-left text-white/50 text-xs uppercase tracking-wider">
+                <tr className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
                   <th className="p-4 font-medium">SKU</th>
                   <th className="p-4 font-medium">Nama Produk</th>
                   <th className="p-4 font-medium">Satuan</th>
@@ -186,18 +182,18 @@ export default function Dashboard() {
               </thead>
               <tbody>
                 {withStock.map((p) => (
-                  <tr key={p.id} className="border-t border-white/5 text-white/80">
-                    <td className="p-4 font-mono text-cyan-200/70">{p.sku}</td>
+                  <tr key={p.id} className="border-t border-ink/5 text-ink/80">
+                    <td className="p-4 font-mono text-ink-soft">{p.sku}</td>
                     <td className="p-4 font-medium">{p.name}</td>
-                    <td className="p-4 text-white/50">{p.unit}</td>
-                    <td className="p-4 text-white/50">{p.minStock}</td>
-                    <td className={`p-4 font-mono font-semibold ${p.isLow ? 'text-rose-300' : 'text-emerald-300'}`}>
+                    <td className="p-4 text-ink-soft">{p.unit}</td>
+                    <td className="p-4 text-ink-soft">{p.minStock}</td>
+                    <td className={`p-4 font-mono font-semibold ${p.isLow ? 'text-[#B3435C]' : 'text-brand'}`}>
                       {p.currentStock}
                     </td>
                   </tr>
                 ))}
                 {withStock.length === 0 && (
-                  <tr><td colSpan={5} className="p-6 text-center text-white/40">Belum ada produk</td></tr>
+                  <tr><td colSpan={5} className="p-6 text-center text-ink-soft/60">Belum ada produk</td></tr>
                 )}
               </tbody>
             </table>
@@ -215,7 +211,7 @@ export default function Dashboard() {
                 key={tab.to}
                 to={tab.to}
                 className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-[11px] transition-colors ${
-                  active ? 'text-cyan-300 bg-cyan-400/10' : 'text-white/50'
+                  active ? 'text-brand bg-brand/10' : 'text-ink-soft'
                 }`}
               >
                 <span className="text-lg leading-none">{tab.icon}</span>
@@ -225,7 +221,7 @@ export default function Dashboard() {
           })}
           <button
             onClick={() => setShowMoreMenu(true)}
-            className="flex flex-col items-center gap-0.5 px-3 py-1.5 text-[11px] text-white/50"
+            className="flex flex-col items-center gap-0.5 px-3 py-1.5 text-[11px] text-ink-soft"
           >
             <span className="text-lg leading-none">☰</span>
             Lainnya
@@ -236,17 +232,17 @@ export default function Dashboard() {
       {/* ===== DRAWER MENU LENGKAP (mobile) ===== */}
       {showMoreMenu && (
         <div className="md:hidden fixed inset-0 z-50 flex items-end">
-          <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm" onClick={() => setShowMoreMenu(false)} />
+          <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm" onClick={() => setShowMoreMenu(false)} />
           <div className="relative w-full max-h-[80vh] overflow-y-auto rounded-t-3xl p-5 pb-8 drawer-panel">
-            <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4" />
+            <div className="w-10 h-1 bg-ink/15 rounded-full mx-auto mb-4" />
             <div className="flex justify-between items-center mb-5">
-              <h2 className="font-bold text-lg text-white">Semua Menu</h2>
-              <button onClick={() => setShowMoreMenu(false)} className="text-white/40 text-xl leading-none">✕</button>
+              <h2 className="font-display font-semibold text-lg text-ink">Semua Menu</h2>
+              <button onClick={() => setShowMoreMenu(false)} className="text-ink-soft text-xl leading-none">✕</button>
             </div>
 
             {groupedForDrawer.map((group) => (
               <div key={group.key} className="mb-5">
-                <p className="text-[11px] uppercase text-white/40 font-semibold mb-2.5 tracking-wider">{group.title}</p>
+                <p className="text-[11px] uppercase text-ink-soft font-semibold mb-2.5 tracking-wider">{group.title}</p>
                 <div className="grid grid-cols-3 gap-2.5">
                   {group.items.map((item) => (
                     <Link
@@ -258,7 +254,7 @@ export default function Dashboard() {
                       }`}
                     >
                       <span className="text-xl">{item.icon}</span>
-                      <span className="text-white/80 leading-tight">{item.label}</span>
+                      <span className="text-ink/80 leading-tight">{item.label}</span>
                     </Link>
                   ))}
                 </div>

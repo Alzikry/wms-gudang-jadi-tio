@@ -70,13 +70,16 @@ export default function StockAdjust() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">🔒 Koreksi Stok (Admin)</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">🔒 Koreksi Stok (Admin)</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
       <div className="bg-red-50 border border-red-300 rounded p-3 mb-4 text-sm text-red-700">
@@ -85,15 +88,15 @@ export default function StockAdjust() {
         Setiap koreksi tercatat permanen di Riwayat Stok dengan alasan yang diisi.
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-5">
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
-        {success && <p className="text-green-600 text-sm mb-3">{success}</p>}
+      <form onSubmit={handleSubmit} className="glass-panel p-5">
+        {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
+        {success && <p className="text-sm text-brand bg-brand/10 border border-brand/20 rounded-lg px-3 py-2 mb-3">{success}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Produk</label>
+            <label className="block text-sm text-ink-soft mb-1">Produk</label>
             <select
-              className="border rounded px-3 py-2 w-full"
+              className="glass-field w-full"
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
               required
@@ -106,9 +109,9 @@ export default function StockAdjust() {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Gudang</label>
+            <label className="block text-sm text-ink-soft mb-1">Gudang</label>
             <select
-              className="border rounded px-3 py-2 w-full"
+              className="glass-field w-full"
               value={warehouseId}
               onChange={(e) => setWarehouseId(e.target.value)}
               required
@@ -122,18 +125,18 @@ export default function StockAdjust() {
         </div>
 
         {currentQty !== null && (
-          <div className="bg-gray-100 rounded p-3 mb-4 text-sm">
+          <div className="bg-ink/5 border border-ink/10 rounded-xl p-3 mb-4 text-sm text-ink">
             Stok tercatat saat ini: <strong>{currentQty}</strong>
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Jumlah Stok yang Benar</label>
+            <label className="block text-sm text-ink-soft mb-1">Jumlah Stok yang Benar</label>
             <input
               type="number"
               placeholder="Masukkan angka stok sebenarnya"
-              className="border rounded px-3 py-2 w-full"
+              className="glass-field w-full"
               value={newQuantity}
               onChange={(e) => setNewQuantity(e.target.value)}
               min={0}
@@ -141,11 +144,11 @@ export default function StockAdjust() {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Alasan Koreksi (wajib)</label>
+            <label className="block text-sm text-ink-soft mb-1">Alasan Koreksi (wajib)</label>
             <input
               type="text"
               placeholder="Misal: Salah input, barang rusak, dll"
-              className="border rounded px-3 py-2 w-full"
+              className="glass-field w-full"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               required

@@ -86,18 +86,21 @@ export default function StockTransfer() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Transfer Antar Gudang</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Transfer Antar Gudang</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-5 mb-6">
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
-        {success && <p className="text-green-600 text-sm mb-3">{success}</p>}
+      <form onSubmit={handleSubmit} className="glass-panel p-5 mb-6">
+        {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
+        {success && <p className="text-sm text-brand bg-brand/10 border border-brand/20 rounded-lg px-3 py-2 mb-3">{success}</p>}
 
         {warehouses.length < 2 && (
           <p className="text-yellow-700 bg-yellow-50 border border-yellow-300 rounded p-3 text-sm mb-4">
@@ -107,9 +110,9 @@ export default function StockTransfer() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Dari Gudang</label>
+            <label className="block text-sm text-ink-soft mb-1">Dari Gudang</label>
             <select
-              className="border rounded px-3 py-2 w-full"
+              className="glass-field w-full"
               value={form.fromWarehouseId}
               onChange={(e) => setForm({ ...form, fromWarehouseId: e.target.value })}
               required
@@ -122,9 +125,9 @@ export default function StockTransfer() {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Ke Gudang</label>
+            <label className="block text-sm text-ink-soft mb-1">Ke Gudang</label>
             <select
-              className="border rounded px-3 py-2 w-full"
+              className="glass-field w-full"
               value={form.toWarehouseId}
               onChange={(e) => setForm({ ...form, toWarehouseId: e.target.value })}
               required
@@ -141,7 +144,7 @@ export default function StockTransfer() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <select
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.productId}
             onChange={(e) => setForm({ ...form, productId: e.target.value })}
             required
@@ -155,7 +158,7 @@ export default function StockTransfer() {
           <input
             type="number"
             placeholder="Jumlah"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.quantity}
             onChange={(e) => setForm({ ...form, quantity: e.target.value })}
             min={1}
@@ -163,7 +166,7 @@ export default function StockTransfer() {
           />
 
           <select
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.toBinId}
             onChange={(e) => setForm({ ...form, toBinId: e.target.value })}
             disabled={bins.length === 0}
@@ -178,17 +181,17 @@ export default function StockTransfer() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-brand text-white px-4 py-2 rounded font-medium disabled:opacity-50"
+          className="btn-primary px-4 py-2 rounded-xl"
         >
           {loading ? 'Memproses...' : '🔁 Proses Transfer'}
         </button>
       </form>
 
       {history.length > 0 && (
-        <div className="bg-white rounded-xl shadow overflow-hidden">
-          <div className="p-3 border-b font-medium text-sm">Riwayat Transfer (sesi ini)</div>
+        <div className="glass-panel overflow-hidden overflow-x-auto">
+          <div className="p-3 border-b border-ink/10 font-medium text-sm text-ink">Riwayat Transfer (sesi ini)</div>
           <table className="w-full text-sm">
-            <thead className="bg-gray-100 text-left">
+            <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
               <tr>
                 <th className="p-3">Waktu</th>
                 <th className="p-3">Produk</th>
@@ -199,7 +202,7 @@ export default function StockTransfer() {
             </thead>
             <tbody>
               {history.map((h, i) => (
-                <tr key={i} className="border-t">
+                <tr key={i} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">{h.time}</td>
                   <td className="p-3">{h.productName}</td>
                   <td className="p-3">{h.from}</td>

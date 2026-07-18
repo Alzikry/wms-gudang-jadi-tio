@@ -62,25 +62,28 @@ export default function Suppliers() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Data Supplier</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Data Supplier</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-5 mb-6">
-        <h2 className="font-medium mb-3">{editingId ? 'Edit Supplier' : 'Tambah Supplier Baru'}</h2>
+      <form onSubmit={handleSubmit} className="glass-panel p-5 mb-6">
+        <h2 className="font-display text-lg text-ink mb-3">{editingId ? 'Edit Supplier' : 'Tambah Supplier Baru'}</h2>
 
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+        {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
           <input
             type="text"
             placeholder="Nama Supplier"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
@@ -88,14 +91,14 @@ export default function Suppliers() {
           <input
             type="text"
             placeholder="No. Telepon"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
           />
           <input
             type="text"
             placeholder="Alamat"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.address}
             onChange={(e) => setForm({ ...form, address: e.target.value })}
           />
@@ -105,21 +108,21 @@ export default function Suppliers() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-brand text-white px-4 py-2 rounded font-medium disabled:opacity-50"
+            className="btn-primary px-4 py-2 rounded-xl"
           >
             {loading ? 'Menyimpan...' : editingId ? 'Update Supplier' : 'Tambah Supplier'}
           </button>
           {editingId && (
-            <button type="button" onClick={cancelEdit} className="px-4 py-2 rounded border">
+            <button type="button" onClick={cancelEdit} className="px-4 py-2 rounded-xl border border-ink/15 text-ink-soft hover:bg-ink/5 transition-colors">
               Batal
             </button>
           )}
         </div>
       </form>
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="glass-panel overflow-hidden overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Nama</th>
               <th className="p-3">Telepon</th>
@@ -129,18 +132,18 @@ export default function Suppliers() {
           </thead>
           <tbody>
             {suppliers.map((s) => (
-              <tr key={s.id} className="border-t">
+              <tr key={s.id} className="border-t border-ink/5 text-ink/85">
                 <td className="p-3">{s.name}</td>
                 <td className="p-3">{s.phone || '-'}</td>
                 <td className="p-3">{s.address || '-'}</td>
                 <td className="p-3 space-x-3">
-                  <button onClick={() => handleEdit(s)} className="text-blue-600">Edit</button>
-                  <button onClick={() => handleDelete(s.id)} className="text-red-600">Hapus</button>
+                  <button onClick={() => handleEdit(s)} className="text-brand font-semibold hover:underline">Edit</button>
+                  <button onClick={() => handleDelete(s.id)} className="text-[#B3435C] font-semibold hover:underline">Hapus</button>
                 </td>
               </tr>
             ))}
             {suppliers.length === 0 && (
-              <tr><td colSpan={4} className="p-3 text-center text-gray-400">Belum ada supplier</td></tr>
+              <tr><td colSpan={4} className="p-6 text-center text-ink-soft/60">Belum ada supplier</td></tr>
             )}
           </tbody>
         </table>

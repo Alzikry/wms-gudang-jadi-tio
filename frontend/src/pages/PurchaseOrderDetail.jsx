@@ -74,28 +74,31 @@ export default function PurchaseOrderDetail() {
   const isClosed = po.status === 'RECEIVED' || po.status === 'CANCELLED';
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Detail Purchase Order</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Detail Purchase Order</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <button onClick={() => navigate('/purchase-orders')} className="text-sm text-brand">
+        <button onClick={() => navigate('/purchase-orders')} className="text-sm text-brand font-semibold hover:underline">
           ← Kembali ke Daftar PO
         </button>
       </header>
 
-      <div className="bg-white rounded-xl shadow p-5 mb-6">
+      <div className="glass-panel p-5 mb-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <p className="text-sm text-gray-500">Supplier</p>
+            <p className="text-sm text-ink-soft">Supplier</p>
             <p className="font-medium">{po.supplier?.name}</p>
           </div>
           <span className={`px-3 py-1 rounded text-xs font-medium ${badge.color}`}>{badge.text}</span>
         </div>
 
         <table className="w-full text-sm mb-4">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-2">Produk</th>
               <th className="p-2">Dipesan</th>
@@ -108,7 +111,7 @@ export default function PurchaseOrderDetail() {
             {po.items.map((item) => {
               const remaining = Number(item.quantity) - Number(item.quantityReceived);
               return (
-                <tr key={item.id} className="border-t">
+                <tr key={item.id} className="border-t border-ink/5 text-ink/85">
                   <td className="p-2">{item.product?.sku} - {item.product?.name}</td>
                   <td className="p-2">{Number(item.quantity)} {item.product?.unit}</td>
                   <td className="p-2">{Number(item.quantityReceived)} {item.product?.unit}</td>
@@ -118,7 +121,7 @@ export default function PurchaseOrderDetail() {
                       {remaining > 0 ? (
                         <input
                           type="number"
-                          className="border rounded px-2 py-1 w-24"
+                          className="glass-field w-24"
                           min={0}
                           max={remaining}
                           value={receiveQty[item.id] ?? ''}
@@ -137,13 +140,13 @@ export default function PurchaseOrderDetail() {
 
         {!isClosed && (
           <form onSubmit={handleReceive}>
-            {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
-            {success && <p className="text-green-600 text-sm mb-3">{success}</p>}
+            {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
+            {success && <p className="text-sm text-brand bg-brand/10 border border-brand/20 rounded-lg px-3 py-2 mb-3">{success}</p>}
 
             <div className="mb-3">
-              <label className="block text-sm text-gray-600 mb-1">Gudang Tujuan</label>
+              <label className="block text-sm text-ink-soft mb-1">Gudang Tujuan</label>
               <select
-                className="border rounded px-3 py-2 w-full md:w-64"
+                className="glass-field w-full md:w-64"
                 value={warehouseId}
                 onChange={(e) => setWarehouseId(e.target.value)}
                 required
@@ -166,7 +169,7 @@ export default function PurchaseOrderDetail() {
         )}
 
         {isClosed && (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-ink-soft">
             PO ini sudah berstatus <strong>{badge.text}</strong>, tidak ada aksi lagi yang tersedia.
           </p>
         )}

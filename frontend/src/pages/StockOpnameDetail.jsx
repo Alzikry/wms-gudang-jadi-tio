@@ -85,39 +85,42 @@ export default function StockOpnameDetail() {
     }
   }
 
-  if (loading) return <div className="min-h-screen bg-gray-50 p-6">Memuat...</div>;
-  if (!opname) return <div className="min-h-screen bg-gray-50 p-6 text-red-600">{error || 'Tidak ditemukan'}</div>;
+  if (loading) return <div className="min-h-screen wms-bg p-6 relative">Memuat...</div>;
+  if (!opname) return <div className="min-h-screen wms-bg p-6 flex items-center justify-center text-[#B3435C] font-medium">{error || 'Tidak ditemukan'}</div>;
 
   const isDraft = opname.status === 'DRAFT';
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Stock Opname — {opname.warehouse?.name}</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Stock Opname — {opname.warehouse?.name}</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/stock-opnames" className="text-sm text-brand">← Kembali ke Daftar Stock Opname</Link>
+        <Link to="/stock-opnames" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Daftar Stock Opname</Link>
       </header>
 
-      <div className="bg-white rounded-xl shadow p-5 mb-6">
+      <div className="glass-panel p-5 mb-6">
         <div className="flex justify-between items-center mb-4">
           <span className={`px-2 py-1 rounded text-xs font-medium ${isDraft ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>
             {isDraft ? 'Sedang Dihitung' : 'Selesai'}
           </span>
-          <p className="text-gray-500 text-sm">
+          <p className="text-ink-soft text-sm">
             Dibuat {new Date(opname.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
             {opname.completedAt && ` · Selesai ${new Date(opname.completedAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}`}
           </p>
         </div>
 
-        {opname.note && <p className="text-sm text-gray-600 mb-4">Catatan: {opname.note}</p>}
+        {opname.note && <p className="text-sm text-ink-soft mb-4">Catatan: {opname.note}</p>}
 
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
-        {savedMsg && <p className="text-green-600 text-sm mb-3">{savedMsg}</p>}
+        {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
+        {savedMsg && <p className="text-sm text-brand bg-brand/10 border border-brand/20 rounded-lg px-3 py-2 mb-3">{savedMsg}</p>}
 
         <table className="w-full text-sm mb-4">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Produk</th>
               <th className="p-3">Stok Sistem</th>
@@ -134,9 +137,9 @@ export default function StockOpnameDetail() {
                   : null);
 
               return (
-                <tr key={item.id} className="border-t">
+                <tr key={item.id} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">
-                    {item.product?.name} <span className="text-gray-400">({item.product?.sku})</span>
+                    {item.product?.name} <span className="text-ink-soft/50">({item.product?.sku})</span>
                   </td>
                   <td className="p-3">{Number(item.systemQty)} {item.product?.unit}</td>
                   <td className="p-3">
@@ -144,7 +147,7 @@ export default function StockOpnameDetail() {
                       <input
                         type="number"
                         min={0}
-                        className="border rounded px-2 py-1 w-24"
+                        className="glass-field w-24"
                         value={physicalQty[item.id] ?? ''}
                         onChange={(e) => updateQty(item.id, e.target.value)}
                       />
@@ -154,13 +157,13 @@ export default function StockOpnameDetail() {
                   </td>
                   <td className="p-3">
                     {diff === null ? (
-                      <span className="text-gray-400">-</span>
+                      <span className="text-ink-soft/50">-</span>
                     ) : diff === 0 ? (
-                      <span className="text-gray-500">Sesuai</span>
+                      <span className="text-ink-soft">Sesuai</span>
                     ) : diff > 0 ? (
                       <span className="text-green-600 font-medium">+{diff} {item.product?.unit}</span>
                     ) : (
-                      <span className="text-red-600 font-medium">{diff} {item.product?.unit}</span>
+                      <span className="text-[#B3435C] font-medium">{diff} {item.product?.unit}</span>
                     )}
                   </td>
                 </tr>
@@ -174,14 +177,14 @@ export default function StockOpnameDetail() {
             <button
               onClick={handleSave}
               disabled={saving || completing}
-              className="px-4 py-2 rounded border font-medium disabled:opacity-50"
+              className="px-4 py-2 rounded-xl border border-ink/15 text-ink-soft hover:bg-ink/5 transition-colors font-medium disabled:opacity-50"
             >
               {saving ? 'Menyimpan...' : 'Simpan Hasil Hitung'}
             </button>
             <button
               onClick={handleComplete}
               disabled={saving || completing}
-              className="bg-brand text-white px-4 py-2 rounded font-medium disabled:opacity-50"
+              className="btn-primary px-4 py-2 rounded-xl"
             >
               {completing ? 'Memproses...' : 'Selesaikan & Koreksi Stok'}
             </button>
@@ -189,7 +192,7 @@ export default function StockOpnameDetail() {
         )}
 
         {!isDraft && (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-ink-soft">
             Stock Opname ini sudah selesai. Selisih yang ditemukan sudah otomatis dikoreksi ke stok sistem dan tercatat di Riwayat Stok.
           </p>
         )}

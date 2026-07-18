@@ -36,40 +36,43 @@ export default function Reports() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Laporan</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Laporan</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
       {/* Kartu ringkasan */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500">Total Produk</p>
-          <p className="text-2xl font-semibold">{summary?.totalProducts ?? '-'}</p>
+        <div className="glass-panel p-4">
+          <p className="text-sm text-ink-soft">Total Produk</p>
+          <p className="font-display text-2xl text-ink">{summary?.totalProducts ?? '-'}</p>
         </div>
-        <div className="bg-white rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500">Total Gudang</p>
-          <p className="text-2xl font-semibold">{summary?.totalWarehouses ?? '-'}</p>
+        <div className="glass-panel p-4">
+          <p className="text-sm text-ink-soft">Total Gudang</p>
+          <p className="font-display text-2xl text-ink">{summary?.totalWarehouses ?? '-'}</p>
         </div>
-        <div className="bg-white rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500">Total Unit Stok</p>
-          <p className="text-2xl font-semibold">{summary?.totalStockUnits ?? '-'}</p>
+        <div className="glass-panel p-4">
+          <p className="text-sm text-ink-soft">Total Unit Stok</p>
+          <p className="font-display text-2xl text-ink">{summary?.totalStockUnits ?? '-'}</p>
         </div>
-        <div className="bg-white rounded-xl shadow p-4">
-          <p className="text-sm text-gray-500">Stok Menipis</p>
-          <p className={`text-2xl font-semibold ${summary?.lowStockCount > 0 ? 'text-red-600' : ''}`}>
+        <div className="glass-panel p-4">
+          <p className="text-sm text-ink-soft">Stok Menipis</p>
+          <p className={`font-display text-2xl text-ink ${summary?.lowStockCount > 0 ? 'text-[#B3435C]' : ''}`}>
             {summary?.lowStockCount ?? '-'}
           </p>
         </div>
       </div>
 
       {/* Tombol export */}
-      <div className="bg-white rounded-xl shadow p-5 mb-6">
-        <h2 className="font-medium mb-3">Export Laporan ke Excel</h2>
+      <div className="glass-panel p-5 mb-6">
+        <h2 className="font-display text-lg text-ink mb-3">Export Laporan ke Excel</h2>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => handleExport('products')}
@@ -90,10 +93,10 @@ export default function Reports() {
 
       {/* Daftar produk stok menipis */}
       {summary?.lowStockProducts?.length > 0 && (
-        <div className="bg-white rounded-xl shadow overflow-hidden">
-          <div className="p-3 border-b font-medium text-sm">⚠️ Produk dengan Stok Menipis</div>
+        <div className="glass-panel overflow-hidden overflow-x-auto">
+          <div className="p-3 border-b border-ink/10 font-medium text-sm text-ink">⚠️ Produk dengan Stok Menipis</div>
           <table className="w-full text-sm">
-            <thead className="bg-gray-100 text-left">
+            <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
               <tr>
                 <th className="p-3">SKU</th>
                 <th className="p-3">Nama Produk</th>
@@ -103,10 +106,10 @@ export default function Reports() {
             </thead>
             <tbody>
               {summary.lowStockProducts.map((p) => (
-                <tr key={p.id} className="border-t">
+                <tr key={p.id} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">{p.sku}</td>
                   <td className="p-3">{p.name}</td>
-                  <td className="p-3 text-red-600 font-medium">{p.currentStock} {p.unit}</td>
+                  <td className="p-3 text-[#B3435C] font-medium">{p.currentStock} {p.unit}</td>
                   <td className="p-3">{p.minStock}</td>
                 </tr>
               ))}

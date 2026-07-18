@@ -39,19 +39,22 @@ export default function StockByWarehouse() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Stok per Gudang</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Stok per Gudang</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
       <div className="mb-4">
-        <label className="block text-sm text-gray-600 mb-1">Filter Gudang</label>
+        <label className="block text-sm text-ink-soft mb-1">Filter Gudang</label>
         <select
-          className="border rounded px-3 py-2 w-full md:w-64"
+          className="glass-field w-full md:w-64"
           value={filterWarehouseId}
           onChange={(e) => setFilterWarehouseId(e.target.value)}
         >
@@ -62,9 +65,9 @@ export default function StockByWarehouse() {
         </select>
       </div>
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="glass-panel overflow-hidden overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Produk</th>
               <th className="p-3">Gudang</th>
@@ -74,19 +77,19 @@ export default function StockByWarehouse() {
           </thead>
           <tbody>
             {loading && (
-              <tr><td colSpan={4} className="p-3 text-center text-gray-400">Memuat...</td></tr>
+              <tr><td colSpan={4} className="p-6 text-center text-ink-soft/60">Memuat...</td></tr>
             )}
             {!loading && sortedStocks.length === 0 && (
-              <tr><td colSpan={4} className="p-3 text-center text-gray-400">Belum ada data stok</td></tr>
+              <tr><td colSpan={4} className="p-6 text-center text-ink-soft/60">Belum ada data stok</td></tr>
             )}
             {!loading && sortedStocks.map((s) => {
               const isLow = Number(s.quantity) <= (s.product?.minStock ?? 0);
               return (
-                <tr key={s.id} className="border-t">
+                <tr key={s.id} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">{s.product?.sku} - {s.product?.name}</td>
                   <td className="p-3">{s.warehouse?.name}</td>
-                  <td className="p-3 text-gray-500">{s.bin ? `${s.bin.code}${s.bin.name ? ` - ${s.bin.name}` : ''}` : '-'}</td>
-                  <td className={`p-3 font-medium ${isLow ? 'text-red-600' : ''}`}>
+                  <td className="p-3 text-ink-soft">{s.bin ? `${s.bin.code}${s.bin.name ? ` - ${s.bin.name}` : ''}` : '-'}</td>
+                  <td className={`p-3 font-medium ${isLow ? 'text-[#B3435C] font-semibold' : ''}`}>
                     {Number(s.quantity)} {s.product?.unit}
                   </td>
                 </tr>

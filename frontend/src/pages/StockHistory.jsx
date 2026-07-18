@@ -27,39 +27,42 @@ export default function StockHistory() {
   useStockEvents({ onUpdated: loadMovements });
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Riwayat Stok</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Riwayat Stok</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => setFilterType('')}
-          className={`px-3 py-1.5 rounded text-sm font-medium ${filterType === '' ? 'bg-gray-800 text-white' : 'bg-white border'}`}
+          className={`px-3 py-1.5 rounded text-sm font-medium ${filterType === '' ? 'bg-ink text-white' : 'bg-white/40 backdrop-blur border border-ink/15 text-ink-soft'}`}
         >
           Semua
         </button>
         <button
           onClick={() => setFilterType('IN')}
-          className={`px-3 py-1.5 rounded text-sm font-medium ${filterType === 'IN' ? 'bg-green-600 text-white' : 'bg-white border'}`}
+          className={`px-3 py-1.5 rounded text-sm font-medium ${filterType === 'IN' ? 'bg-green-600 text-white' : 'bg-white/40 backdrop-blur border border-ink/15 text-ink-soft'}`}
         >
           ⬇️ Masuk
         </button>
         <button
           onClick={() => setFilterType('OUT')}
-          className={`px-3 py-1.5 rounded text-sm font-medium ${filterType === 'OUT' ? 'bg-red-600 text-white' : 'bg-white border'}`}
+          className={`px-3 py-1.5 rounded text-sm font-medium ${filterType === 'OUT' ? 'bg-red-600 text-white' : 'bg-white/40 backdrop-blur border border-ink/15 text-ink-soft'}`}
         >
           ⬆️ Keluar
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="glass-panel overflow-hidden overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Tanggal & Waktu</th>
               <th className="p-3">Produk</th>
@@ -71,13 +74,13 @@ export default function StockHistory() {
           </thead>
           <tbody>
             {loading && (
-              <tr><td colSpan={6} className="p-3 text-center text-gray-400">Memuat...</td></tr>
+              <tr><td colSpan={6} className="p-6 text-center text-ink-soft/60">Memuat...</td></tr>
             )}
             {!loading && movements.length === 0 && (
-              <tr><td colSpan={6} className="p-3 text-center text-gray-400">Belum ada riwayat transaksi</td></tr>
+              <tr><td colSpan={6} className="p-6 text-center text-ink-soft/60">Belum ada riwayat transaksi</td></tr>
             )}
             {!loading && movements.map((m) => (
-              <tr key={m.id} className="border-t">
+              <tr key={m.id} className="border-t border-ink/5 text-ink/85">
                 <td className="p-3">
                   {new Date(m.createdAt).toLocaleString('id-ID', {
                     day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
@@ -89,13 +92,13 @@ export default function StockHistory() {
                   {m.type === 'IN' ? (
                     <span className="text-green-600">⬇️ Masuk</span>
                   ) : m.type === 'OUT' ? (
-                    <span className="text-red-600">⬆️ Keluar</span>
+                    <span className="text-[#B3435C] font-semibold">⬆️ Keluar</span>
                   ) : (
                     m.type
                   )}
                 </td>
                 <td className="p-3 font-medium">{Number(m.quantity)} {m.product?.unit}</td>
-                <td className="p-3 text-gray-500">{m.createdBy?.name || '-'}</td>
+                <td className="p-3 text-ink-soft">{m.createdBy?.name || '-'}</td>
               </tr>
             ))}
           </tbody>

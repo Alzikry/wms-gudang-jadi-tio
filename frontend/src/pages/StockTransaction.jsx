@@ -115,39 +115,42 @@ export default function StockTransaction() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Transaksi Stok</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Transaksi Stok</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => setType('in')}
-          className={`px-4 py-2 rounded font-medium ${type === 'in' ? 'bg-green-600 text-white' : 'bg-white border'}`}
+          className={`px-4 py-2 rounded font-medium ${type === 'in' ? 'bg-green-600 text-white' : 'bg-white/40 backdrop-blur border border-ink/15 text-ink-soft'}`}
         >
           ⬇️ Barang Masuk
         </button>
         <button
           onClick={() => setType('out')}
-          className={`px-4 py-2 rounded font-medium ${type === 'out' ? 'bg-red-600 text-white' : 'bg-white border'}`}
+          className={`px-4 py-2 rounded font-medium ${type === 'out' ? 'bg-red-600 text-white' : 'bg-white/40 backdrop-blur border border-ink/15 text-ink-soft'}`}
         >
           ⬆️ Barang Keluar
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-5 mb-6">
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
-        {success && <p className="text-green-600 text-sm mb-3">{success}</p>}
+      <form onSubmit={handleSubmit} className="glass-panel p-5 mb-6">
+        {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
+        {success && <p className="text-sm text-brand bg-brand/10 border border-brand/20 rounded-lg px-3 py-2 mb-3">{success}</p>}
 
         <div className={`grid grid-cols-1 ${type === 'in' ? 'md:grid-cols-2' : ''} gap-3 mb-4`}>
           <div>
-            <label className="block text-sm text-gray-600 mb-1">Gudang</label>
+            <label className="block text-sm text-ink-soft mb-1">Gudang</label>
             <select
-              className="border rounded px-3 py-2 w-full"
+              className="glass-field w-full"
               value={warehouseId}
               onChange={(e) => setWarehouseId(e.target.value)}
               required
@@ -162,9 +165,9 @@ export default function StockTransaction() {
           {/* Lokasi rak — cuma muncul buat Barang Masuk */}
           {type === 'in' && (
             <div>
-              <label className="block text-sm text-gray-600 mb-1">Lokasi Rak (opsional)</label>
+              <label className="block text-sm text-ink-soft mb-1">Lokasi Rak (opsional)</label>
               <select
-                className="border rounded px-3 py-2 w-full"
+                className="glass-field w-full"
                 value={binId}
                 onChange={(e) => setBinId(e.target.value)}
                 disabled={bins.length === 0}
@@ -182,7 +185,7 @@ export default function StockTransaction() {
           {rows.map((row) => (
             <div key={row.key} className="grid grid-cols-1 md:grid-cols-[1fr_150px_40px] gap-2 items-center">
               <select
-                className="border rounded px-3 py-2"
+                className="glass-field"
                 value={row.productId}
                 onChange={(e) => updateRow(row.key, 'productId', e.target.value)}
                 required
@@ -196,7 +199,7 @@ export default function StockTransaction() {
               <input
                 type="number"
                 placeholder="Jumlah"
-                className="border rounded px-3 py-2"
+                className="glass-field"
                 value={row.quantity}
                 onChange={(e) => updateRow(row.key, 'quantity', e.target.value)}
                 min={1}
@@ -207,7 +210,7 @@ export default function StockTransaction() {
                 type="button"
                 onClick={() => removeRow(row.key)}
                 disabled={rows.length === 1}
-                className="text-red-600 disabled:text-gray-300 disabled:cursor-not-allowed"
+                className="text-[#B3435C] font-semibold hover:underline disabled:text-ink-soft/30 disabled:cursor-not-allowed"
                 title="Hapus baris"
               >
                 ✕
@@ -216,7 +219,7 @@ export default function StockTransaction() {
           ))}
         </div>
 
-        <button type="button" onClick={addRow} className="text-sm text-brand font-medium mb-4">
+        <button type="button" onClick={addRow} className="text-sm text-brand font-semibold hover:underline font-medium mb-4">
           + Tambah Baris Produk
         </button>
 
@@ -238,10 +241,10 @@ export default function StockTransaction() {
       </form>
 
       {history.length > 0 && (
-        <div className="bg-white rounded-xl shadow overflow-hidden">
-          <div className="p-3 border-b font-medium text-sm">Riwayat Transaksi (sesi ini)</div>
+        <div className="glass-panel overflow-hidden overflow-x-auto">
+          <div className="p-3 border-b border-ink/10 font-medium text-sm text-ink">Riwayat Transaksi (sesi ini)</div>
           <table className="w-full text-sm">
-            <thead className="bg-gray-100 text-left">
+            <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
               <tr>
                 <th className="p-3">Waktu</th>
                 <th className="p-3">Produk</th>
@@ -253,13 +256,13 @@ export default function StockTransaction() {
             </thead>
             <tbody>
               {history.map((h, i) => (
-                <tr key={i} className="border-t">
+                <tr key={i} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">{h.time}</td>
                   <td className="p-3">{h.productName}</td>
                   <td className="p-3">{h.type === 'in' ? '⬇️ Masuk' : '⬆️ Keluar'}</td>
                   <td className="p-3">{h.quantity}</td>
                   <td className="p-3 font-medium">{h.newQty}</td>
-                  <td className={`p-3 ${h.status === 'sukses' ? 'text-green-600' : 'text-red-600'}`}>
+                  <td className={`p-3 ${h.status === 'sukses' ? 'text-green-600' : 'text-[#B3435C] font-medium'}`}>
                     {h.status === 'sukses' ? '✓ Sukses' : h.status}
                   </td>
                 </tr>

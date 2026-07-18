@@ -76,30 +76,33 @@ export default function SalesOrderDetail() {
   }
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-50 p-6">Memuat...</div>;
+    return <div className="min-h-screen wms-bg p-6 relative">Memuat...</div>;
   }
   if (!so) {
-    return <div className="min-h-screen bg-gray-50 p-6 text-red-600">{error || 'Sales Order tidak ditemukan'}</div>;
+    return <div className="min-h-screen wms-bg p-6 flex items-center justify-center text-[#B3435C] font-medium">{error || 'Sales Order tidak ditemukan'}</div>;
   }
 
   const badge = statusLabel[so.status] || statusLabel.DRAFT;
   const isDone = so.status === 'SHIPPED' || so.status === 'CANCELLED';
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Sales Order — {so.customer?.name}</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Sales Order — {so.customer?.name}</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/sales-orders" className="text-sm text-brand">← Kembali ke Daftar Sales Order</Link>
+        <Link to="/sales-orders" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Daftar Sales Order</Link>
       </header>
 
-      <div className="bg-white rounded-xl shadow p-5 mb-6">
+      <div className="glass-panel p-5 mb-6">
         <div className="flex justify-between items-center mb-4">
           <div>
             <span className={`px-2 py-1 rounded text-xs font-medium ${badge.color}`}>{badge.text}</span>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-ink-soft text-sm mt-1">
               Dibuat {new Date(so.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
               {so.expectedShipDate &&
                 ` · Target kirim ${new Date(so.expectedShipDate).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}`}
@@ -107,10 +110,10 @@ export default function SalesOrderDetail() {
           </div>
         </div>
 
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+        {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
 
         <table className="w-full text-sm mb-4">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Produk</th>
               <th className="p-3">Dipesan</th>
@@ -122,21 +125,21 @@ export default function SalesOrderDetail() {
             {so.items.map((item) => {
               const remaining = Number(item.quantity) - Number(item.quantityShipped);
               return (
-                <tr key={item.id} className="border-t">
+                <tr key={item.id} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">
-                    {item.product?.name} <span className="text-gray-400">({item.product?.sku})</span>
+                    {item.product?.name} <span className="text-ink-soft/50">({item.product?.sku})</span>
                   </td>
                   <td className="p-3">{Number(item.quantity)} {item.product?.unit}</td>
                   <td className="p-3">{Number(item.quantityShipped)} {item.product?.unit}</td>
                   <td className="p-3">
                     {isDone || remaining <= 0 ? (
-                      <span className="text-gray-400">-</span>
+                      <span className="text-ink-soft/50">-</span>
                     ) : (
                       <input
                         type="number"
                         min={0}
                         max={remaining}
-                        className="border rounded px-2 py-1 w-24"
+                        className="glass-field w-24"
                         value={shipQty[item.id] ?? 0}
                         onChange={(e) => updateShipQty(item.id, e.target.value)}
                       />
@@ -146,7 +149,7 @@ export default function SalesOrderDetail() {
               );
             })}
             {so.items.length === 0 && (
-              <tr><td colSpan={4} className="p-3 text-center text-gray-400">Tidak ada item</td></tr>
+              <tr><td colSpan={4} className="p-6 text-center text-ink-soft/60">Tidak ada item</td></tr>
             )}
           </tbody>
         </table>
@@ -154,7 +157,7 @@ export default function SalesOrderDetail() {
         {!isDone && (
           <form onSubmit={handleShip} className="flex flex-wrap gap-3 items-center">
             <select
-              className="border rounded px-3 py-2"
+              className="glass-field"
               value={warehouseId}
               onChange={(e) => setWarehouseId(e.target.value)}
               required
@@ -167,7 +170,7 @@ export default function SalesOrderDetail() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-brand text-white px-4 py-2 rounded font-medium disabled:opacity-50"
+              className="btn-primary px-4 py-2 rounded-xl"
             >
               {submitting ? 'Memproses...' : 'Kirim Barang & Update Stok'}
             </button>
@@ -175,7 +178,7 @@ export default function SalesOrderDetail() {
         )}
 
         {isDone && (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-ink-soft">
             Sales Order ini sudah berstatus <strong>{badge.text}</strong>, tidak ada aksi lagi yang bisa dilakukan.
           </p>
         )}

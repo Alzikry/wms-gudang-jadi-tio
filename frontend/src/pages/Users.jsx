@@ -77,26 +77,29 @@ export default function Users() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">User Management</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">User Management</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
       {/* Form tambah user baru */}
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-5 mb-6">
-        <h2 className="font-medium mb-3">Tambah User Baru</h2>
+      <form onSubmit={handleSubmit} className="glass-panel p-5 mb-6">
+        <h2 className="font-display text-lg text-ink mb-3">Tambah User Baru</h2>
 
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+        {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
           <input
             type="text"
             placeholder="Nama Lengkap"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
@@ -104,7 +107,7 @@ export default function Users() {
           <input
             type="email"
             placeholder="Email"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             required
@@ -112,13 +115,13 @@ export default function Users() {
           <input
             type="password"
             placeholder="Password (min 6 karakter)"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             required
           />
           <select
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value })}
           >
@@ -128,23 +131,23 @@ export default function Users() {
           </select>
         </div>
 
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-ink-soft mb-3">
           {ROLE_OPTIONS.find((r) => r.value === form.role)?.desc}
         </p>
 
         <button
           type="submit"
           disabled={loading}
-          className="bg-brand text-white px-4 py-2 rounded font-medium disabled:opacity-50"
+          className="btn-primary px-4 py-2 rounded-xl"
         >
           {loading ? 'Menyimpan...' : 'Tambah User'}
         </button>
       </form>
 
       {/* Daftar user */}
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="glass-panel overflow-hidden overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Nama</th>
               <th className="p-3">Email</th>
@@ -155,8 +158,8 @@ export default function Users() {
           </thead>
           <tbody>
             {users.map((u) => (
-              <tr key={u.id} className="border-t">
-                <td className="p-3">{u.name} {u.id === user.id && <span className="text-xs text-gray-400">(Anda)</span>}</td>
+              <tr key={u.id} className="border-t border-ink/5 text-ink/85">
+                <td className="p-3">{u.name} {u.id === user.id && <span className="text-xs text-ink-soft/50">(Anda)</span>}</td>
                 <td className="p-3">{u.email}</td>
                 <td className="p-3">
                   <select
@@ -173,13 +176,13 @@ export default function Users() {
                   {u.isActive ? (
                     <span className="text-green-600 text-xs font-medium">Aktif</span>
                   ) : (
-                    <span className="text-gray-400 text-xs font-medium">Nonaktif</span>
+                    <span className="text-ink-soft/50 text-xs font-medium">Nonaktif</span>
                   )}
                 </td>
                 <td className="p-3">
                   <button
                     onClick={() => handleToggleActive(u)}
-                    className={u.isActive ? 'text-red-600' : 'text-green-600'}
+                    className={u.isActive ? 'text-[#B3435C] font-semibold hover:underline' : 'text-green-600 font-semibold hover:underline'}
                   >
                     {u.isActive ? 'Nonaktifkan' : 'Aktifkan'}
                   </button>
@@ -187,17 +190,17 @@ export default function Users() {
               </tr>
             ))}
             {users.length === 0 && (
-              <tr><td colSpan={5} className="p-3 text-center text-gray-400">Belum ada user</td></tr>
+              <tr><td colSpan={5} className="p-6 text-center text-ink-soft/60">Belum ada user</td></tr>
             )}
           </tbody>
         </table>
       </div>
 
       {/* Referensi hak akses tiap role */}
-      <div className="bg-white rounded-xl shadow p-5 mt-6">
-        <h2 className="font-medium mb-3 text-sm">Referensi Hak Akses Role</h2>
+      <div className="glass-panel p-5 mt-6">
+        <h2 className="font-display text-sm text-ink mb-3">Referensi Hak Akses Role</h2>
         <table className="w-full text-xs">
-          <thead className="text-left text-gray-500">
+          <thead className="text-left text-ink-soft">
             <tr>
               <th className="p-2">Role</th>
               <th className="p-2">Lihat</th>
@@ -207,11 +210,11 @@ export default function Users() {
             </tr>
           </thead>
           <tbody>
-            <tr className="border-t"><td className="p-2 font-medium">Admin</td><td className="p-2">✅</td><td className="p-2">✅</td><td className="p-2">✅</td><td className="p-2">✅</td></tr>
-            <tr className="border-t"><td className="p-2 font-medium">Staff Admin</td><td className="p-2">✅</td><td className="p-2">✅</td><td className="p-2">❌</td><td className="p-2">❌</td></tr>
-            <tr className="border-t"><td className="p-2 font-medium">Staff Gudang</td><td className="p-2">✅</td><td className="p-2">❌</td><td className="p-2">❌</td><td className="p-2">❌</td></tr>
-            <tr className="border-t"><td className="p-2 font-medium">Supervisor</td><td className="p-2">✅</td><td className="p-2">❌</td><td className="p-2">✅</td><td className="p-2">❌</td></tr>
-            <tr className="border-t"><td className="p-2 font-medium">Manager</td><td className="p-2">✅</td><td className="p-2">❌</td><td className="p-2">❌</td><td className="p-2">✅</td></tr>
+            <tr className="border-t border-ink/5 text-ink/85"><td className="p-2 font-medium text-ink-soft">Admin</td><td className="p-2">✅</td><td className="p-2">✅</td><td className="p-2">✅</td><td className="p-2">✅</td></tr>
+            <tr className="border-t border-ink/5 text-ink/85"><td className="p-2 font-medium text-ink-soft">Staff Admin</td><td className="p-2">✅</td><td className="p-2">✅</td><td className="p-2">❌</td><td className="p-2">❌</td></tr>
+            <tr className="border-t border-ink/5 text-ink/85"><td className="p-2 font-medium text-ink-soft">Staff Gudang</td><td className="p-2">✅</td><td className="p-2">❌</td><td className="p-2">❌</td><td className="p-2">❌</td></tr>
+            <tr className="border-t border-ink/5 text-ink/85"><td className="p-2 font-medium text-ink-soft">Supervisor</td><td className="p-2">✅</td><td className="p-2">❌</td><td className="p-2">✅</td><td className="p-2">❌</td></tr>
+            <tr className="border-t border-ink/5 text-ink/85"><td className="p-2 font-medium text-ink-soft">Manager</td><td className="p-2">✅</td><td className="p-2">❌</td><td className="p-2">❌</td><td className="p-2">✅</td></tr>
           </tbody>
         </table>
       </div>

@@ -96,23 +96,26 @@ export default function ReorderSuggestions() {
   const selectedCount = Object.values(selected).filter(Boolean).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Auto Reorder — Saran Pembelian</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Auto Reorder — Saran Pembelian</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
-      <p className="text-sm text-gray-500 mb-4">
+      <p className="text-sm text-ink-soft mb-4">
         Daftar di bawah ini adalah produk yang stoknya sudah di bawah atau sama dengan batas minimum.
         Kolom <strong>Jumlah Order</strong> sudah diisi saran otomatis, tapi bisa diubah manual sesuai kebutuhan.
         Produk yang belum punya <strong>Supplier Utama</strong> (di halaman Kelola Produk) tidak bisa dipilih —
         set dulu supplier-nya supaya sistem tahu draft PO ini mau dikirim ke mana.
       </p>
 
-      {error && <p className="text-sm text-red-600 mb-3">{error}</p>}
+      {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
 
       {result && (
         <div className="bg-green-50 border border-green-300 rounded p-4 mb-4 text-sm">
@@ -123,7 +126,7 @@ export default function ReorderSuggestions() {
             {result.createdPOs.map((po) => (
               <li key={po.id}>
                 Ke <strong>{po.supplier?.name}</strong> — {po.items.length} produk (
-                <Link to={`/purchase-orders/${po.id}`} className="text-blue-600 underline">
+                <Link to={`/purchase-orders/${po.id}`} className="text-brand font-semibold hover:underline underline">
                   lihat detail
                 </Link>
                 )
@@ -140,18 +143,18 @@ export default function ReorderSuggestions() {
               </ul>
             </>
           )}
-          <p className="text-gray-600 mt-3">
+          <p className="text-ink-soft mt-3">
             Draft PO ini belum resmi dipesan ke supplier — buka halaman Purchase Order untuk cek & konfirmasi dulu.
           </p>
         </div>
       )}
 
       {loading ? (
-        <p className="text-sm text-gray-500">Memuat...</p>
+        <p className="text-sm text-ink-soft">Memuat...</p>
       ) : (
-        <div className="bg-white rounded-xl shadow overflow-hidden">
+        <div className="glass-panel overflow-hidden overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-100 text-left">
+            <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
               <tr>
                 <th className="p-3">
                   <input type="checkbox" onChange={toggleSelectAll} />
@@ -165,7 +168,7 @@ export default function ReorderSuggestions() {
             </thead>
             <tbody>
               {items.map((p) => (
-                <tr key={p.id} className="border-t">
+                <tr key={p.id} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">
                     <input
                       type="checkbox"
@@ -174,25 +177,25 @@ export default function ReorderSuggestions() {
                       onChange={() => toggleSelect(p.id)}
                     />
                   </td>
-                  <td className="p-3">{p.name} <span className="text-gray-400">({p.sku})</span></td>
-                  <td className="p-3 text-red-600 font-medium">{p.currentStock} {p.unit}</td>
+                  <td className="p-3">{p.name} <span className="text-ink-soft/50">({p.sku})</span></td>
+                  <td className="p-3 text-[#B3435C] font-medium">{p.currentStock} {p.unit}</td>
                   <td className="p-3">{p.minStock} {p.unit}</td>
                   <td className="p-3">
                     <div className="flex items-center gap-2">
                       <input
                         type="number"
-                        className="border rounded px-2 py-1 w-24"
+                        className="glass-field w-24"
                         value={qtyOverrides[p.id] ?? ''}
                         onChange={(e) => updateQty(p.id, e.target.value)}
                         disabled={!p.preferredSupplierId}
                         min={1}
                       />
-                      <span className="text-gray-400 text-xs">{p.unit}</span>
+                      <span className="text-ink-soft/50 text-xs">{p.unit}</span>
                       {Number(qtyOverrides[p.id]) !== p.suggestedQty && (
                         <button
                           type="button"
                           onClick={() => resetQty(p.id, p.suggestedQty)}
-                          className="text-xs text-blue-600 underline"
+                          className="text-xs text-brand font-semibold hover:underline underline"
                           title={`Kembalikan ke saran otomatis: ${p.suggestedQty}`}
                         >
                           reset
@@ -209,7 +212,7 @@ export default function ReorderSuggestions() {
               ))}
               {items.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="p-3 text-center text-gray-400">
+                  <td colSpan={6} className="p-6 text-center text-ink-soft/60">
                     Semua stok masih aman, belum ada yang perlu di-reorder 🎉
                   </td>
                 </tr>

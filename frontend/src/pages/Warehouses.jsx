@@ -62,25 +62,28 @@ export default function Warehouses() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Kelola Gudang</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Kelola Gudang</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-5 mb-6">
-        <h2 className="font-medium mb-3">{editingId ? 'Edit Gudang' : 'Tambah Gudang Baru'}</h2>
+      <form onSubmit={handleSubmit} className="glass-panel p-5 mb-6">
+        <h2 className="font-display text-lg text-ink mb-3">{editingId ? 'Edit Gudang' : 'Tambah Gudang Baru'}</h2>
 
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+        {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           <input
             type="text"
             placeholder="Nama Gudang (misal: Gudang Cabang Bekasi)"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
@@ -88,7 +91,7 @@ export default function Warehouses() {
           <input
             type="text"
             placeholder="Alamat (opsional)"
-            className="border rounded px-3 py-2"
+            className="glass-field"
             value={form.address}
             onChange={(e) => setForm({ ...form, address: e.target.value })}
           />
@@ -98,21 +101,21 @@ export default function Warehouses() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-brand text-white px-4 py-2 rounded font-medium disabled:opacity-50"
+            className="btn-primary px-4 py-2 rounded-xl"
           >
             {loading ? 'Menyimpan...' : editingId ? 'Update Gudang' : 'Tambah Gudang'}
           </button>
           {editingId && (
-            <button type="button" onClick={cancelEdit} className="px-4 py-2 rounded border">
+            <button type="button" onClick={cancelEdit} className="px-4 py-2 rounded-xl border border-ink/15 text-ink-soft hover:bg-ink/5 transition-colors">
               Batal
             </button>
           )}
         </div>
       </form>
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="glass-panel overflow-hidden overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Nama Gudang</th>
               <th className="p-3">Alamat</th>
@@ -121,17 +124,17 @@ export default function Warehouses() {
           </thead>
           <tbody>
             {warehouses.map((w) => (
-              <tr key={w.id} className="border-t">
+              <tr key={w.id} className="border-t border-ink/5 text-ink/85">
                 <td className="p-3">{w.name}</td>
                 <td className="p-3">{w.address || '-'}</td>
                 <td className="p-3 space-x-3">
-                  <button onClick={() => handleEdit(w)} className="text-blue-600">Edit</button>
-                  <button onClick={() => handleDelete(w.id)} className="text-red-600">Hapus</button>
+                  <button onClick={() => handleEdit(w)} className="text-brand font-semibold hover:underline">Edit</button>
+                  <button onClick={() => handleDelete(w.id)} className="text-[#B3435C] font-semibold hover:underline">Hapus</button>
                 </td>
               </tr>
             ))}
             {warehouses.length === 0 && (
-              <tr><td colSpan={3} className="p-3 text-center text-gray-400">Belum ada gudang</td></tr>
+              <tr><td colSpan={3} className="p-6 text-center text-ink-soft/60">Belum ada gudang</td></tr>
             )}
           </tbody>
         </table>

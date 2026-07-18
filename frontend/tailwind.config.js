@@ -4,11 +4,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Warna dasar, samain sama tema blueprint (bebas diganti nanti)
         brand: {
-          DEFAULT: '#00e5a0',
-          dark: '#0f1117',
+          DEFAULT: '#0E6B5C',
+          dark: '#0A4F44',
+          light: '#3E8F73',
         },
+        gold: {
+          DEFAULT: '#B08D57',
+        },
+        ink: {
+          DEFAULT: '#20242E',
+          soft: '#5B6472',
+        },
+      },
+      fontFamily: {
+        display: ['Fraunces', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
     },
   },

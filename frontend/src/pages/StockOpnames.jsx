@@ -49,13 +49,16 @@ export default function StockOpnames() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Stock Opname</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Stock Opname</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
       <button
@@ -66,16 +69,16 @@ export default function StockOpnames() {
       </button>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-5 mb-6">
-          {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+        <form onSubmit={handleSubmit} className="glass-panel p-5 mb-6">
+          {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
 
-          <p className="text-sm text-gray-500 mb-3">
+          <p className="text-sm text-ink-soft mb-3">
             Sistem akan otomatis mengambil daftar stok saat ini di gudang yang dipilih untuk dihitung ulang.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
             <select
-              className="border rounded px-3 py-2"
+              className="glass-field"
               value={warehouseId}
               onChange={(e) => setWarehouseId(e.target.value)}
               required
@@ -88,7 +91,7 @@ export default function StockOpnames() {
             <input
               type="text"
               placeholder="Catatan (opsional)"
-              className="border rounded px-3 py-2"
+              className="glass-field"
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
@@ -97,16 +100,16 @@ export default function StockOpnames() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-brand text-white px-4 py-2 rounded font-medium disabled:opacity-50"
+            className="btn-primary px-4 py-2 rounded-xl"
           >
             {loading ? 'Membuat sesi...' : 'Mulai Hitung'}
           </button>
         </form>
       )}
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="glass-panel overflow-hidden overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Tanggal</th>
               <th className="p-3">Gudang</th>
@@ -120,7 +123,7 @@ export default function StockOpnames() {
             {opnames.map((op) => {
               const badge = statusLabel[op.status] || statusLabel.DRAFT;
               return (
-                <tr key={op.id} className="border-t">
+                <tr key={op.id} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">
                     {new Date(op.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </td>
@@ -131,7 +134,7 @@ export default function StockOpnames() {
                     <span className={`px-2 py-1 rounded text-xs font-medium ${badge.color}`}>{badge.text}</span>
                   </td>
                   <td className="p-3">
-                    <Link to={`/stock-opnames/${op.id}`} className="text-blue-600">
+                    <Link to={`/stock-opnames/${op.id}`} className="text-brand font-semibold hover:underline">
                       {op.status === 'DRAFT' ? 'Lanjutkan Hitung' : 'Lihat Hasil'}
                     </Link>
                   </td>
@@ -139,7 +142,7 @@ export default function StockOpnames() {
               );
             })}
             {opnames.length === 0 && (
-              <tr><td colSpan={6} className="p-3 text-center text-gray-400">Belum ada sesi Stock Opname</td></tr>
+              <tr><td colSpan={6} className="p-6 text-center text-ink-soft/60">Belum ada sesi Stock Opname</td></tr>
             )}
           </tbody>
         </table>

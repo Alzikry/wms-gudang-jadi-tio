@@ -75,13 +75,16 @@ export default function SalesOrders() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <header className="flex justify-between items-center mb-6">
+    <div className="min-h-screen wms-bg p-6 relative">
+
+      <div className="wms-orb wms-orb-a" aria-hidden="true" />
+      <div className="wms-orb wms-orb-b" aria-hidden="true" />
+      <header className="glass-panel flex justify-between items-center px-5 py-4 mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Sales Order (Pengeluaran Barang)</h1>
-          <p className="text-gray-500 text-sm">Halo, {user?.name}</p>
+          <h1 className="font-display text-2xl text-ink">Sales Order (Pengeluaran Barang)</h1>
+          <p className="text-ink-soft text-sm">Halo, {user?.name}</p>
         </div>
-        <Link to="/dashboard" className="text-sm text-brand">← Kembali ke Dashboard</Link>
+        <Link to="/dashboard" className="text-sm text-brand font-semibold hover:underline">← Kembali ke Dashboard</Link>
       </header>
 
       <button
@@ -92,12 +95,12 @@ export default function SalesOrders() {
       </button>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-5 mb-6">
-          {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+        <form onSubmit={handleSubmit} className="glass-panel p-5 mb-6">
+          {error && <p className="text-sm text-[#B3435C] bg-[#B3435C]/10 border border-[#B3435C]/20 rounded-lg px-3 py-2 mb-3">{error}</p>}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
             <select
-              className="border rounded px-3 py-2"
+              className="glass-field"
               value={customerId}
               onChange={(e) => setCustomerId(e.target.value)}
               required
@@ -110,7 +113,7 @@ export default function SalesOrders() {
 
             <input
               type="date"
-              className="border rounded px-3 py-2"
+              className="glass-field"
               value={expectedShipDate}
               onChange={(e) => setExpectedShipDate(e.target.value)}
               placeholder="Estimasi tanggal kirim"
@@ -121,7 +124,7 @@ export default function SalesOrders() {
             {rows.map((row) => (
               <div key={row.key} className="grid grid-cols-1 md:grid-cols-[1fr_150px_40px] gap-2 items-center">
                 <select
-                  className="border rounded px-3 py-2"
+                  className="glass-field"
                   value={row.productId}
                   onChange={(e) => updateRow(row.key, 'productId', e.target.value)}
                   required
@@ -134,7 +137,7 @@ export default function SalesOrders() {
                 <input
                   type="number"
                   placeholder="Jumlah Pesan"
-                  className="border rounded px-3 py-2"
+                  className="glass-field"
                   value={row.quantity}
                   onChange={(e) => updateRow(row.key, 'quantity', e.target.value)}
                   min={1}
@@ -144,7 +147,7 @@ export default function SalesOrders() {
                   type="button"
                   onClick={() => removeRow(row.key)}
                   disabled={rows.length === 1}
-                  className="text-red-600 disabled:text-gray-300"
+                  className="text-[#B3435C] font-semibold hover:underline disabled:text-ink-soft/30"
                 >
                   ✕
                 </button>
@@ -152,23 +155,23 @@ export default function SalesOrders() {
             ))}
           </div>
 
-          <button type="button" onClick={addRow} className="text-sm text-brand font-medium mb-4 block">
+          <button type="button" onClick={addRow} className="text-sm text-brand font-semibold hover:underline font-medium mb-4 block">
             + Tambah Baris Produk
           </button>
 
           <button
             type="submit"
             disabled={loading}
-            className="bg-brand text-white px-4 py-2 rounded font-medium disabled:opacity-50"
+            className="btn-primary px-4 py-2 rounded-xl"
           >
             {loading ? 'Menyimpan...' : 'Buat Sales Order'}
           </button>
         </form>
       )}
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
+      <div className="glass-panel overflow-hidden overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="bg-gray-100 text-left">
+          <thead className="border-b border-ink/10 text-left text-ink-soft text-xs uppercase tracking-wider">
             <tr>
               <th className="p-3">Tanggal Dibuat</th>
               <th className="p-3">Customer</th>
@@ -181,7 +184,7 @@ export default function SalesOrders() {
             {orders.map((so) => {
               const badge = statusLabel[so.status] || statusLabel.DRAFT;
               return (
-                <tr key={so.id} className="border-t">
+                <tr key={so.id} className="border-t border-ink/5 text-ink/85">
                   <td className="p-3">
                     {new Date(so.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </td>
@@ -191,13 +194,13 @@ export default function SalesOrders() {
                     <span className={`px-2 py-1 rounded text-xs font-medium ${badge.color}`}>{badge.text}</span>
                   </td>
                   <td className="p-3">
-                    <Link to={`/sales-orders/${so.id}`} className="text-blue-600">Detail / Kirim</Link>
+                    <Link to={`/sales-orders/${so.id}`} className="text-brand font-semibold hover:underline">Detail / Kirim</Link>
                   </td>
                 </tr>
               );
             })}
             {orders.length === 0 && (
-              <tr><td colSpan={5} className="p-3 text-center text-gray-400">Belum ada Sales Order</td></tr>
+              <tr><td colSpan={5} className="p-6 text-center text-ink-soft/60">Belum ada Sales Order</td></tr>
             )}
           </tbody>
         </table>

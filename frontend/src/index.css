@@ -6,3 +6,92 @@ body {
   margin: 0;
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
 }
+
+/* ============================================================
+   Tema Glassmorphism — WMS Pro
+   Latar gradasi biru-ungu gelap khas "digital warehouse malam",
+   dengan panel kaca (blur + transparansi) untuk semua kartu/nav.
+   ============================================================ */
+
+.wms-bg {
+  background: linear-gradient(160deg, #0b1224 0%, #151238 45%, #1e1b4b 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Orb cahaya ambient di latar — murni dekoratif, tidak mengganggu layout */
+.wms-orb {
+  position: fixed;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+.wms-orb-a {
+  width: 340px;
+  height: 340px;
+  top: -80px;
+  right: -100px;
+  background: #22d3ee;
+}
+.wms-orb-b {
+  width: 300px;
+  height: 300px;
+  bottom: 10%;
+  left: -120px;
+  background: #818cf8;
+}
+
+.glass-panel {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.drawer-panel {
+  background: rgba(15, 18, 40, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.drawer-tile {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.drawer-tile-admin {
+  background: rgba(244, 63, 94, 0.08);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+.nav-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.nav-chip:hover {
+  background: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.35);
+}
+
+/* Angka stok pakai tabular figures biar rapi sejajar */
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}

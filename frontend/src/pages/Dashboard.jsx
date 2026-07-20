@@ -31,6 +31,11 @@ const MOBILE_TAB_PRIORITY = ['/stock', '/stock/history', '/products', '/stock/by
 
 const GROUP_LABELS = { gudang: 'Stok & Gudang', bisnis: 'Transaksi Bisnis', admin: 'Khusus Admin' };
 
+// Label grup khusus buat sidebar desktop — beda dari GROUP_LABELS di atas karena
+// sidebar juga menampilkan grup "utama" (yang di drawer mobile sengaja tidak
+// ditampilkan karena sudah ada di bottom tab bar).
+const SIDEBAR_GROUP_LABELS = { utama: 'Utama', gudang: 'Stok & Gudang', bisnis: 'Transaksi Bisnis', admin: 'Khusus Admin' };
+
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -69,18 +74,64 @@ export default function Dashboard() {
     items: visibleItems.filter((i) => i.group === g),
   })).filter((g) => g.items.length > 0);
 
+  // Sama seperti groupedForDrawer, tapi khusus buat sidebar desktop (ikut grup "utama").
+  const groupedForSidebar = ['utama', 'gudang', 'bisnis', 'admin'].map((g) => ({
+    key: g,
+    title: SIDEBAR_GROUP_LABELS[g],
+    items: visibleItems.filter((i) => i.group === g),
+  })).filter((g) => g.items.length > 0);
+
   const withStock = products.map((p) => {
     const currentStock = p.stocks?.length ? p.stocks.reduce((sum, s) => sum + Number(s.quantity), 0) : 0;
     return { ...p, currentStock, isLow: currentStock <= p.minStock };
   });
 
   return (
-    <div className="min-h-screen wms-bg pb-24 md:pb-8">
+    <div className="min-h-screen wms-bg pb-24 md:pb-0">
       {/* Ambient glow orbs — dekorasi latar, tidak interaktif */}
       <div className="wms-orb wms-orb-a" aria-hidden="true" />
       <div className="wms-orb wms-orb-b" aria-hidden="true" />
 
-      <div className="relative px-4 pt-6 md:px-8 md:pt-8 max-w-5xl mx-auto">
+      <div className="relative md:flex md:items-start">
+        {/* ===== SIDEBAR (desktop saja) ===== */}
+        <aside className="hidden md:flex md:flex-col md:w-64 md:shrink-0 md:sticky md:top-0 md:h-screen md:overflow-y-auto glass-panel md:rounded-none px-4 py-6">
+          <div className="px-2 mb-6">
+            <p className="font-display text-lg text-ink leading-tight">WMS Pro</p>
+            <p className="text-ink-soft text-xs mt-0.5">Sistem Gudang</p>
+          </div>
+
+          <nav className="flex-1 space-y-5">
+            {groupedForSidebar.map((group) => (
+              <div key={group.key}>
+                <p className="text-[10px] uppercase text-ink-soft/70 font-semibold mb-1.5 px-2 tracking-wider">
+                  {group.title}
+                </p>
+                <div className="space-y-0.5">
+                  {group.items.map((item) => {
+                    const active = location.pathname === item.to;
+                    return (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        className={`flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-sm transition-colors ${
+                          active
+                            ? 'bg-brand text-white font-semibold'
+                            : 'text-ink-soft hover:bg-ink/5 hover:text-ink'
+                        }`}
+                      >
+                        <span className="text-base leading-none">{item.icon}</span>
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </nav>
+        </aside>
+
+        {/* ===== AREA KONTEN ===== */}
+        <div className="relative flex-1 min-w-0 px-4 pt-6 md:px-8 md:pt-8 max-w-5xl mx-auto">
         {/* ===== HEADER ===== */}
         <header className="glass-panel flex justify-between items-center px-5 py-4 mb-5">
           <div>
@@ -96,15 +147,6 @@ export default function Dashboard() {
             Keluar
           </button>
         </header>
-
-        {/* ===== NAV DESKTOP ===== */}
-        <div className="hidden md:flex mb-5 flex-wrap gap-2.5">
-          {visibleItems.map((item) => (
-            <Link key={item.to} to={item.to} className="nav-chip">
-              <span>{item.icon}</span> {item.label}
-            </Link>
-          ))}
-        </div>
 
         {/* ===== NAV MOBILE — buka drawer ===== */}
         <button
@@ -199,6 +241,7 @@ export default function Dashboard() {
             </table>
           </div>
         </section>
+        </div>
       </div>
 
       {/* ===== BOTTOM TAB BAR (mobile) ===== */}
